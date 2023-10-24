@@ -47,6 +47,7 @@ Route::middleware('auth.basic')->group(function () {
     Route::get('/with/book_copy', [BookController::class, 'bookCopy']);
     Route::get('/with/lending_user', [LendingController::class, 'lendingUser']);
     Route::get('/with/lending_user2', [LendingController::class, 'lendingUser2']);
+    Route::get('/with/copy_book_lending', [CopyController::class, 'copyBookLending']);
 });
 
 //bejelentkezés nélkül is hozzáférhet

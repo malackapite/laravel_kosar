@@ -17,4 +17,12 @@ class Copy extends Model
         'publication',
         'book_id'
     ];
+
+    public function book()
+        //kapcsolat, osztály, ott hogy hívják, itt hogy hívják
+    {    return $this->belongsTo(Book::class, 'book_id', 'book_id');   }
+
+    public function lending()
+        //kapcsolat, osztály, ott hogy hívják, itt hogy hívják
+    {    return $this->hasMany(Lending::class, 'copy_id', 'copy_id');   }
 }

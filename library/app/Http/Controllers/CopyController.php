@@ -38,4 +38,9 @@ class CopyController extends Controller
         
     }
 
+    public function copyBookLending(){
+        //több függvényt is használhatunk
+        return Copy::with('book')->with('lending')->get();
+    }
+
 }
