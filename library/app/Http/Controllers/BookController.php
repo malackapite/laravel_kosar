@@ -44,4 +44,10 @@ class BookController extends Controller
         $books = Book::all();
         return view('book.list', ['books' => $books]);
     }
+
+    //with függvények
+    public function bookCopy(){
+        //a modelben megírt függvényre hivatkozunk..
+        return Book::with('copy')->get();
+    }
 }

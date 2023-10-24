@@ -32,9 +32,24 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-Route::apiResource('/api/books', BookController::class);
-Route::apiResource('/api/copies', CopyController::class);
-Route::apiResource('/api/users', UserController::class);
+//admin férhet hozzá
+Route::middleware( ['admin'])->group(function () {
+    Route::apiResource('/api/users', UserController::class);
+});
+
+//bejelentkezett felhasználó
+Route::middleware('auth.basic')->group(function () {
+    Route::apiResource('/api/books', BookController::class);
+    Route::apiResource('/api/copies', CopyController::class);
+    
+    //lekérdezések
+    //with
+    Route::get('/with/book_copy', [BookController::class, 'bookCopy']);
+    Route::get('/with/lending_user', [LendingController::class, 'lendingUser']);
+    Route::get('/with/lending_user2', [LendingController::class, 'lendingUser2']);
+});
+
+//bejelentkezés nélkül is hozzáférhet
 Route::patch('/api/user_password/{id}', [UserController::class, 'updatePassword']);
 Route::delete('/api/lendings/{user_id}/{copy_id}/{start}', [LendingController::class, 'destroy']);
 

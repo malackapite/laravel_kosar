@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\Lending;
+use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class LendingController extends Controller
 {
@@ -37,6 +39,20 @@ class LendingController extends Controller
         $lending->start = $request->start;
         $lending->save();
         
+    }
+
+    public function lendingUser(){
+        //bejelentkezett felhasználó
+        $user = Auth::user();
+        $lendings = Lending::with('user')->where('user_id','=',$user->id)->get();
+        return $lendings;
+    }
+
+    public function lendingUser2(){
+        //bejelentkezett felhasználó
+        $user = Auth::user();
+        $lendings = Lending::with('userHas')->where('user_id','=',$user->id)->get();
+        return $lendings;
     }
 
 }

@@ -41,6 +41,7 @@ class UserController extends Controller
         if ($validator->fails()) {
             return response()->json(["message" => $validator->errors()->all()], 400);
         }
+        //a where fg-ben a paraméterek között default = jel van
         $user = User::where("id", $id)->update([
             "password" => Hash::make($request->password),
         ]);

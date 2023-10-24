@@ -24,4 +24,12 @@ class Lending extends Model
         return $query;
     }
 
+    public function user()
+        //kapcsolat, osztály, ott hogy hívják, itt hogy hívják
+    {    return $this->belongsTo(User::class, 'id', 'user_id');   }
+
+    public function userHas()
+        //kapcsolat, osztály, ott hogy hívják, itt hogy hívják
+    {    return $this->hasOne(User::class, 'id', 'user_id');   }
+
 }
