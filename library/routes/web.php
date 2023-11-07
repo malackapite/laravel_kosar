@@ -39,7 +39,7 @@ Route::middleware( ['admin'])->group(function () {
 
 //bejelentkezett felhasználó
 Route::middleware('auth.basic')->group(function () {
-    Route::apiResource('/api/books', BookController::class);
+    
     Route::apiResource('/api/copies', CopyController::class);
     
     //lekérdezések
@@ -51,6 +51,7 @@ Route::middleware('auth.basic')->group(function () {
 });
 
 //bejelentkezés nélkül is hozzáférhet
+Route::apiResource('/api/books', BookController::class);
 Route::patch('/api/user_password/{id}', [UserController::class, 'updatePassword']);
 Route::delete('/api/lendings/{user_id}/{copy_id}/{start}', [LendingController::class, 'destroy']);
 
