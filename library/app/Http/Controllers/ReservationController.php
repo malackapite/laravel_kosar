@@ -14,10 +14,12 @@ class ReservationController extends Controller
 
     public function show ($user_id, $book_id, $start)
     {
-        return Reservation::where('user_id', $user_id)
+        $reservation = Reservation::where('user_id', $user_id)
         ->where('book_id', $book_id)
         ->where('start', $start)
-        ->first();
+        ->get();
+        //egyelemű listát ad vissza a get, az elemet szeretnénk visszakapni
+        return $reservation[0];
     }
 
 
@@ -26,7 +28,7 @@ class ReservationController extends Controller
     }
     
     public function update(Request $request, $user_id, $book_id, $start){
-        $reservation = Reservation::show($user_id, $book_id, $start);
+        $reservation = $this->show($user_id, $book_id, $start);
         //csak patch!!!
         $reservation->message = $request->message;
         $reservation->save();

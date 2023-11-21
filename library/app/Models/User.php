@@ -43,4 +43,12 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
     ];
+
+    public function lending()
+        //kapcsolat, osztály, ott hogy hívják, itt hogy hívják
+    {    return $this->hasMany(Lending::class, 'user_id', 'id'); }
+
+    public function reservation()
+        //kapcsolat, osztály, ott hogy hívják, itt hogy hívják
+    {    return $this->hasMany(Reservation::class, 'user_id', 'id'); }
 }
