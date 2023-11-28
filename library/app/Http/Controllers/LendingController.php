@@ -6,6 +6,7 @@ use App\Models\Lending;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class LendingController extends Controller
 {
@@ -57,6 +58,43 @@ class LendingController extends Controller
         $user = Auth::user();
         $lendings = Lending::with('userHas')->where('user_id','=',$user->id)->get();
         return $lendings;
+    }
+
+    public function booksAtUser(){
+        //bejelentkezett felhasználó
+        $user = Auth::user();
+        $books = DB::table('lendings as l')	//egy tábla lehet csak
+        ->join('copies as c' ,'l.copy_id','=','c.copy_id') //kapcsolat leírása, akár több join is lehet
+        ->join('books as b' ,'c.book_id','=','b.book_id')
+        ->select('b.title', 'b.author')	
+        ->where('l.user_id','=', $user->id) 	//esetleges szűrés
+        ->whereNull('l.end')
+        ->get();				//esetleges aggregálás; ha select, akkor get() a vége
+        return $books;
+    }
+
+    //hosszabbítsd meg az egyik nálad lévő könyvet (copy_id, start) ! (patch)
+    public function lengthen($copy_id, $start)
+    {
+        //patch kérés!!!
+        //bejelentkezett felhasználó
+        $user = Auth::user();
+        DB::table('lendings')
+        ->where('copy_id', $copy_id)
+        ->where('start', $start)
+        ->where('user_id', $user->id)
+        //update paramétere assz tömb, benne kulcs-érték párok
+        ->update(['extension' => 1]); 
+    }
+
+    public function booksBack(){
+        $books = DB::table('lendings as l')
+        ->join('copies as c' ,'l.copy_id','=','c.copy_id')
+        ->join('books as b' ,'c.book_id','=','b.book_id')
+        ->select('b.author', 'b.title')
+        ->whereRaw('DATEDIFF(CURRENT_DATE, l.end) = 0')
+        ->get();
+        return $books;
     }
 
 }

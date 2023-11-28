@@ -30,6 +30,7 @@ Route::middleware( ['admin'])->group(function () {
 
 //bejelentkezett felhasználó
 Route::middleware('auth.basic')->group(function () {
+    Route::post('/lendings', [LendingController::class, 'store']);
     Route::get('/reservations/{user_id}/{book_id}/{start}', [ReservationController::class, 'show']);
     Route::patch('/reservations/{user_id}/{book_id}/{start}', [ReservationController::class, 'update']);
     Route::post('/reservations', [ReservationController::class, 'store']);
@@ -41,12 +42,20 @@ Route::middleware('auth.basic')->group(function () {
     Route::get('/with/lending_user2', [LendingController::class, 'lendingUser2']);
     Route::get('/with/copy_book_lending', [CopyController::class, 'copyBookLending']);
     Route::get('/with/user_l_r', [UserController::class, 'userLR']);
+    //egyéb lekérdezések
+    Route::get('books_at_user', [LendingController::class, 'booksAtUser']);
+    //lengthen($copy_id, $start)
+    Route::patch('lengthen/{copy_id}/{start}', [LendingController::class, 'lengthen']);
+    //moreLendings($copy_id, $db)
+    Route::get('more_lendings/{copy_id}/{db}', [CopyController::class, 'moreLendings']);
+    Route::get('books_back', [LendingController::class, 'booksBack']);
 });
 
 //bejelentkezés nélkül is hozzáférhet
 Route::apiResource('/books', BookController::class);
 Route::patch('/user_password/{id}', [UserController::class, 'updatePassword']);
 Route::delete('/lendings/{user_id}/{copy_id}/{start}', [LendingController::class, 'destroy']);
+//lekérdezések
 Route::get('/publicated/{book_id}', [BookController::class, 'publicated']);
 Route::get('/publicated2/{book_id}', [BookController::class, 'publicated2']);
 Route::get('/publicated_count/{book_id}', [BookController::class, 'publicatedCount']);
