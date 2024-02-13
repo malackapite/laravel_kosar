@@ -24,9 +24,17 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 //admin férhet hozzá
-Route::middleware( ['admin'])->group(function () {
-    Route::apiResource('/api/users', UserController::class);
-});
+// Route::middleware(['admin'])->group(function () {
+//     Route::get('/admin/users', [UserController::class, 'index']);
+//     //Route::apiResource('/api/users', UserController::class);
+// });
+
+// Route::middleware(['auth:admin'])->group(function () {
+//     Route::get('/admin/users', [UserController::class, 'index']);
+//     // Add more admin-only routes here
+// });
+
+Route::get('/admin/users', [UserController::class, 'index'])->middleware('auth:admin');
 
 //bejelentkezett felhasználó
 Route::middleware('auth.basic')->group(function () {
@@ -49,6 +57,8 @@ Route::middleware('auth.basic')->group(function () {
     //moreLendings($copy_id, $db)
     Route::get('more_lendings/{copy_id}/{db}', [CopyController::class, 'moreLendings']);
     Route::get('books_back', [LendingController::class, 'booksBack']);
+    //triggerek
+    Route::patch('/bringback/{copy_id}/{start}', [LendingController::class, 'bringBack']);
 });
 
 //bejelentkezés nélkül is hozzáférhet
